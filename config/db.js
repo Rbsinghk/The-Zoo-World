@@ -6,8 +6,8 @@ mongoose.connect(process.env.MONGOOSE_CONNECTION,{
     useUnifiedTopology: true,
 })
 mongoose.connection.once("open",()=>{
-    console.log('Mongoose is Connected');
+    console.log('Database is Connected');
 })
 mongoose.connection.on("error",(e)=>{
-    console.log('Mongoose is Not Connected',e);
+    console.log('Database is Not Connected',e);
 })
