@@ -16,9 +16,15 @@ const new_mongoose = new mongoose.Schema({
         required: true
     },
     mobile: {
-        type: Number,
+        type: String,
+        match: /^(\()?\d{3}(\))?(|\s)?\d{3}(|\s)\d{4}$/,
+        unique: true,
         required: true,
-        match: /^(\()?\d{3}(\))?(|\s)?\d{3}(|\s)\d{4}$/
+        validate(value) {
+            if (!validator.isMobilePhone(value)) {
+                throw new Error("Mobile Number is invalid")
+            }
+        }
     },
     person: {
         kids: {

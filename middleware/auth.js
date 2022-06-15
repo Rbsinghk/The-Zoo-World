@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 const register = require('../models/user');
 
-const userAccess = ['/get', '/animal/getAll', '/feedback/create', '/booking/bookinTicket', '/profile/emailCode'];
+const userAccess = ['/get', '/animal/getAll', '/feedback/create', '/booking/bookinTicket', '/profile/emailCode', '/profile/changePass'];
 
 const verifytoken = async function checkUserOrAdmin(req, res, next) {
   try {
