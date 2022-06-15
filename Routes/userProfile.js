@@ -7,7 +7,7 @@ router.get('/admin/alluser', auth, userController.getAllUser);
 router.get("/profile/:id", userController.userProfileById);
 router.patch("/profile/update/:id", userController.userProfileUpdate);
 router.delete('/profile/delete/:id', userController.userProfileDelete);
-router.post('/profile/emailCode', auth, userController.emailCode)
-router.post('/profile/changePass', auth, userController.changepassword)
+router.post('/profile/emailCode', auth, userController.emailCode);
+router.post('/profile/changePass', auth, userController.changepassword);
 
 module.exports = router;
