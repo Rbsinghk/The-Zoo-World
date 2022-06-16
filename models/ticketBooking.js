@@ -1,30 +1,17 @@
 const mongoose = require("mongoose");
-const validator = require("validator");
 
 const new_mongoose = new mongoose.Schema({
     email: {
         type: String,
         required: true,
-        validate(value) {
-            if (!validator.isEmail(value)) {
-                throw new Error("Email is invalid")
-            }
-        }
     },
     name: {
         type: String,
         required: true
     },
     mobile: {
-        type: String,
-        match: /^(\()?\d{3}(\))?(|\s)?\d{3}(|\s)\d{4}$/,
-        unique: true,
+        type: Number,
         required: true,
-        validate(value) {
-            if (!validator.isMobilePhone(value)) {
-                throw new Error("Mobile Number is invalid")
-            }
-        }
     },
     person: {
         kids: {
@@ -46,12 +33,7 @@ const new_mongoose = new mongoose.Schema({
     },
     dateOfVisit: {
         type: Date,
-        required: true,
-        validate(value) {
-            if (!value >= Date.now) {
-                throw new Error("date is invalid")
-            }
-        }
+        required: true
     },
     date: {
         type: Date,

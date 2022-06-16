@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const validator = require("validator");
 
 const new_mongoose = new mongoose.Schema({
     name: {
@@ -9,11 +8,6 @@ const new_mongoose = new mongoose.Schema({
     email: {
         type: String,
         required: true,
-        validate(value) {
-            if (!validator.isEmail(value)) {
-                throw new Error("Email is invalid")
-            }
-        }
     },
     subject: {
         type: String,
@@ -26,7 +20,6 @@ const new_mongoose = new mongoose.Schema({
     userid: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "userSchemas",
-        // required: true
     },
     date: {
         type: Date,

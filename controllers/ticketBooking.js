@@ -17,8 +17,8 @@ const bookingTicketEdit = async (req, res) => {
     try {
         const ticket = await ticketSchema.findById(req.params.id);
         const _id = req.params.id;
-        let a = { totalAmount: ticket.totalAmount, person: req.body.person, name: req.body.name, email: req.body.email, mobile: req.body.mobile };
         ticket.totalAmount = req.body.person.kids * 50 + req.body.person.adult * 100 + req.body.person.srCitizen * 50;
+        let a = { totalAmount: ticket.totalAmount, person: req.body.person, name: req.body.name, email: req.body.email, mobile: req.body.mobile };
         const profileUpdate = await ticketSchema.findByIdAndUpdate(_id, a, {
             new: true,
             runValidators: true

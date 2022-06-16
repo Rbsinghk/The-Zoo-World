@@ -1,4 +1,5 @@
 const multer = require('multer');
+const valid = require("validator");
 const animalSchema = require('../models/animals');
 
 const Storage = multer.diskStorage({
@@ -15,16 +16,28 @@ const upload = multer({
 const createAnimal = async (req, res) => {
     upload(req, res, (err) => {
         if (err) {
-            console.log("err");
+            console.log(err);
         }
         else {
-            const newAnimal = new animalSchema(req.body);
-            newAnimal.save()
-                .then(() => res.json({
-                    message: 'Success',
-                    // file: `uploads/${req.file.filename}`
-                }))
-                .catch((err) => res.send(err));
+            const { name, species, age } = req.body;
+            if (valid.isEmpty(name)) {
+                res.json({ messsage: "Name not be empty" });
+            }
+            else if (valid.isEmpty(species)) {
+                res.json({ messsage: "Species no is not empty" });
+            }
+            else if (valid.isEmpty(age)) {
+                res.json({ messsage: "Age not be empty" });
+            }
+            else {
+                const newAnimal = new animalSchema(req.body);
+                newAnimal.save()
+                    .then(() => res.json({
+                        message: 'Success',
+                        // file: `uploads/${req.file.filename}`
+                    }))
+                    .catch((err) => res.send("err"));
+            }
         }
     })
 }
@@ -52,7 +65,8 @@ const updateAnimal = async (req, res) => {
     try {
         const _id = req.params.id;
         const animalProfileUpdate = await animalSchema.findByIdAndUpdate(_id, req.body, {
-            new: true
+            new: true,
+            runValidators: true
         });
         res.send(animalProfileUpdate);
     } catch (error) {

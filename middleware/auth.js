@@ -25,6 +25,6 @@ const verifytoken = async function checkUserOrAdmin(req, res, next) {
   } catch (error) {
     res.status(400).send({ message: "Invalid Token" });
   }
-
 }
+
 module.exports = verifytoken;
