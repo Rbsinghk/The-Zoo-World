@@ -54,48 +54,53 @@ paypal.configure({
 });
 
 const bookingTicketPay = async (req, res) => {
-    const ticket = await ticketSchema.findById(req.body.ticketId);
-    const create_payment_json = {
-        "intent": "sale",
-        "payer": {
-            "payment_method": "paypal"
-        },
-        "redirect_urls": {
-            "return_url": "http://localhost:1000/success",
-            "cancel_url": "http://localhost:1000/cancel"
-        },
-        "transactions": [{
-            "item_list": {
-                "items": [{
-                    "name": req.body.name,
-                    "sku": "001",
-                    "price": ticket.totalAmount,
+    try {
+        const ticket = await ticketSchema.findById(req.body.ticketId);
+        const create_payment_json = {
+            "intent": "sale",
+            "payer": {
+                "payment_method": "paypal"
+            },
+            "redirect_urls": {
+                "return_url": "http://localhost:1000/success",
+                "cancel_url": "http://localhost:1000/cancel"
+            },
+            "transactions": [{
+                "item_list": {
+                    "items": [{
+                        "name": req.body.name,
+                        "sku": "001",
+                        "price": ticket.totalAmount,
+                        "currency": "USD",
+                        "quantity": 1
+                    }]
+                },
+                "amount": {
                     "currency": "USD",
-                    "quantity": 1
-                }]
-            },
-            "amount": {
-                "currency": "USD",
-                "total": ticket.totalAmount
-            },
-            "description": "Hat for the best team ever"
-        }]
-    };
-    paypal.payment.create(create_payment_json, async (error, payment) => {
-        if (error) {
-            res.send(error);
-        } else {
-            const createPaymentData = new paymentSchema({
-                name: req.body.name,
-                userid: req.body.userid,
-                paymentId: payment.id,
-                paymentMethod: payment.payer.payment_method,
-                totalAmount: ticket.totalAmount + req.body.currency
-            });
-            const save = await createPaymentData.save();
-            res.status(201).send(payment);
-        }
-    });
+                    "total": ticket.totalAmount
+                },
+                "description": "Hat for the best team ever"
+            }]
+        };
+        paypal.payment.create(create_payment_json, async (error, payment) => {
+            if (error) {
+                res.send(error);
+            } else {
+                const createPaymentData = new paymentSchema({
+                    name: req.body.name,
+                    userid: req.body.userid,
+                    paymentId: payment.id,
+                    paymentMethod: payment.payer.payment_method,
+                    totalAmount: ticket.totalAmount + req.body.currency
+                });
+                const save = await createPaymentData.save();
+                res.status(201).send(payment);
+            }
+        });
+    }
+    catch (error) {
+        res.send(error)
+    }
 }
 
 const bookingTicketPayGetAll = async (req, res) => {
